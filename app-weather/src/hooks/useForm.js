@@ -11,7 +11,7 @@ const useForm = ({initialState = {}}) => {
     })
   }
 
-  const handleSubmit = (e, url) => {
+  const handleSubmit = (e, url, successCallback) => {
     e.preventDefault()
     fetchData(
       url,
@@ -19,21 +19,21 @@ const useForm = ({initialState = {}}) => {
       formState,
       (data) => {
         console.log('✅', data);
-        const updatedUsers = JSON.parse(localStorage.getItem('users')) || []
-        updatedUsers.push({...formState, ...data})
-        localStorage.setItem('users', JSON.stringify(updatedUsers))
+        setFormState(formState => ({...formState, result: data}) )
+        successCallback(data)
       },
       (err) => {
         console.log('❌', err);
       })
   }
 
-  const handleReset = () => {
+  const handleReset = (resetCallback) => {
     const newFormState = Object.keys(formState).reduce((acc, key) => {
       acc[key] = ''
       return acc
     }, {})
     setFormState(newFormState)
+    resetCallback()
   }
 
   return {
