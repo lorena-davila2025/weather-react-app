@@ -1,4 +1,4 @@
-🌦️ React Weather App
+🌦️ React Weather App  
 A simple weather app that displays current weather conditions by city.
 
 🔧 Features
