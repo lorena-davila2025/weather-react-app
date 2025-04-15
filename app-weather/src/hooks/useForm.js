@@ -11,7 +11,7 @@ const useForm = ({initialState = {}}) => {
     })
   }
 
-  const handleSubmit = (e, url, successCallback) => {
+  const handleSubmit = (e, url, successCallback, errorCallback) => {
     e.preventDefault()
     fetchData(
       url,
@@ -24,6 +24,7 @@ const useForm = ({initialState = {}}) => {
       },
       (err) => {
         console.log('❌', err);
+        errorCallback(err)
       })
   }
 

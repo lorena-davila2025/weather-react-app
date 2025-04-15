@@ -1,12 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import DynamicBootstrapForm from './components/DynamicBoostrapForm'
 import { useLocalStorage } from 'usehooks-ts'
 
 function App() {
-  const [value, setValue, removeValue] = useLocalStorage('weatherData', [])
-
+  const [value, setValue, removeValue] = useLocalStorage('weatherData', {})
+  const [message, setMessage] = useState('')
   const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather?'
+  const difKelvin = 273.15 // Conversion factor from Kelvin to Celsius
 
   const FIELDS = [{
     name: 'city',
@@ -19,7 +20,12 @@ function App() {
     submitText: 'Buscar',
     successCallback: (data) => {
       removeValue()
-      setValue((prev) => [...prev, data]) },
+      setValue(data)
+    },
+    errorCallback: (err) => {
+      console.log('❌', err)
+      setMessage('No weather data available. Please try again later.')
+    },
     resetCallback : removeValue
   }
 
@@ -33,7 +39,7 @@ function App() {
 
   return (
     <>
-      <div className={'container w-45 m-auto mt-5'}>
+      <div className={'container w-45 mt-5'}>
         <h1>Weather app</h1>
         <DynamicBootstrapForm
           fields={FIELDS}
@@ -41,8 +47,19 @@ function App() {
           buildUrl={(formState) => `${BASE_URL}q=${formState.city}&appid=${import.meta.env.VITE_API_KEY}`}
         />
         <div className={'mt-5'}>
-          <h2>Data</h2>
-          <p>{JSON.stringify(value)}</p>
+          {
+            value?.name ?
+              <div>
+                <h2>{value.name}, {value.sys.country}</h2>
+                <p>Current temperature is {Math.floor(value.main.temp - difKelvin)}ºC</p>
+                <p>Current metheorological condition is: {value.weather[0].description}</p>
+                <img
+                  src={`https://openweathermap.org/img/wn/${value.weather[0].icon}@2x.png`}
+                  alt={value.weather[0].description}
+                />
+              </div>
+              :<p>{message}</p>
+          }
         </div>
       </div>
     </>

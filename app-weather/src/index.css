@@ -23,8 +23,8 @@ a:hover {
 
 body {
   margin: auto;
-  min-width: 320px;
-  max-width: 620px;
+  /* min-width: 30%; */
+  /* max-width: 60%; */
   min-height: 100vh;
 }
 

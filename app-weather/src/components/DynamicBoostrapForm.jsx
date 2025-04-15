@@ -6,7 +6,7 @@ const DynamicBootstrapForm = ({fields, buildUrl, formButtons }) => {
   const url = buildUrl(formState)
 
   return (
-    <form onSubmit={(e) => handleSubmit(e, url, formButtons.successCallback)}>
+    <form onSubmit={(e) => handleSubmit(e, url, formButtons.successCallback, formButtons.errorCallback)}>
       {
         fields.map(field => (
           <div className={'mb-3'} key={field.name}>
